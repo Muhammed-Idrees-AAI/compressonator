@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.10)
 #
 # Other options are available : see OPTION_BUILDS... 
 #
-
+message("Configuring Compressonator Library")
 if(POLICY CMP0091)
    cmake_policy(SET CMP0091 NEW)
 endif()
@@ -52,39 +52,40 @@ else()
     set(COMPILER_SUPPORTS_CXX11 ON)
 endif()
 
-option(OPTION_ENABLE_ALL_APPS "Enable all apps" ON)
+option(OPTION_ENABLE_ALL_APPS "Enable all apps" OFF)
 
 #--------------------------------------------------------------------------
 # Enable or Disable Specific Build Apps
 #--------------------------------------------------------------------------
-if (OPTION_ENABLE_ALL_APPS) 
+if (OPTION_ENABLE_ALL_APPS)
     set(OPTION_BUILD_APPS_CMP_CLI     "Build Application: compressonatorcli" ON)
-    set(OPTION_BUILD_APPS_CMP_GUI     "Build Application: compressonator gui" ON)
-    set(OPTION_BUILD_APPS_CMP_TESTCORE "Build Application: cmp_testcore" ON)
-    set(OPTION_BUILD_APPS_CMP_EXAMPLES "Build Application: examples" ON)
-    set(OPTION_BUILD_APPS_CMP_CAS      "Build Application: cmp_cas"     ON)
+    set(OPTION_BUILD_APPS_CMP_GUI     "Build Application: compressonator gui" OFF)
+    set(OPTION_BUILD_APPS_CMP_TESTCORE "Build Application: cmp_testcore" OFF)
+    set(OPTION_BUILD_APPS_CMP_EXAMPLES "Build Application: examples" OFF)
+    set(OPTION_BUILD_APPS_CMP_CAS      "Build Application: cmp_cas"     OFF)
 else()
-    option(OPTION_BUILD_APPS_CMP_CLI       OFF)
+    option(OPTION_BUILD_APPS_CMP_CLI       ON)
     option(OPTION_BUILD_APPS_CMP_GUI       OFF)
     option(OPTION_BUILD_APPS_CMP_TESTCORE  OFF)
     option(OPTION_BUILD_APPS_CMP_EXAMPLES  OFF)
     option(OPTION_BUILD_APPS_CMP_CAS      "Build Application: cmp_cas"     OFF)
 endif()
 
+set(OPTION_BUILD_APPS_CMP_GUI       OFF) # ToDo: Investigate further...
+
 # Minimum Lib Dependencies for CLI and GUI (GUI has addtion lib requirements condition later in this cmake)
-if (OPTION_BUILD_APPS_CMP_CLI OR OPTION_BUILD_APPS_CMP_GUI)
-    set(LIB_BUILD_COMPRESSONATOR_SDK ON)
-    set(LIB_BUILD_FRAMEWORK_SDK ON)
-    set(LIB_BUILD_IMAGEIO ON)
-    set(LIB_BUILD_ANALYSIS ON)
-    set(LIB_BUILD_COMMON ON)
-    set(LIB_BUILD_CORE ON)
-    set(LIB_BUILD_GPUDECODE ON)
-endif()
+
+set(LIB_BUILD_COMPRESSONATOR_SDK OFF)
+set(LIB_BUILD_FRAMEWORK_SDK OFF)
+set(LIB_BUILD_IMAGEIO OFF)
+set(LIB_BUILD_ANALYSIS OFF)
+set(LIB_BUILD_COMMON ON)
+set(LIB_BUILD_CORE ON)
+set(LIB_BUILD_GPUDECODE OFF)
 
 if (OPTION_BUILD_APPS_CMP_VISION)
-    set(LIB_BUILD_COMPRESSONATOR_SDK ON)
-    set(LIB_BUILD_FRAMEWORK_SDK ON)
+    set(LIB_BUILD_COMPRESSONATOR_SDK OFF)
+    set(LIB_BUILD_FRAMEWORK_SDK OFF)
 endif()
 
 # The following options that have been removed
@@ -99,18 +100,18 @@ set(PROJECT_EXTERNAL_LIBDIR ${PROJECT_SOURCE_DIR}/../common/lib/ext)
 # GPUOpen Source Code build options : These options are been revised for v4.2
 # ----------------------------------------------------------------------------
 if(${CMAKE_VERSION} VERSION_GREATER "3.14.0")
-cmp_option(OPTION_BUILD_KTX2    "Build CLI KTX2 Support" ON)
+cmp_option(OPTION_BUILD_KTX2    "Build CLI KTX2 Support" OFF)
 else()
 cmp_option(OPTION_BUILD_KTX2    "Build CLI KTX2 Support" OFF)
 endif()
-cmp_option(OPTION_BUILD_EXR     "Build CLI EXR Support" CMP_HOST_WINDOWS OR CMP_HOST_LINUX)
+cmp_option(OPTION_BUILD_EXR     "Build CLI EXR Support" OFF)
 cmp_option(OPTION_BUILD_DRACO   "Build CLI Draco Support" OFF)
 cmp_option(OPTION_BUILD_GUI     "Build the GUI Application" CMP_HOST_WINDOWS OR OPTION_BUILD_APPS_CMP_GUI)
 cmp_option(OPTION_CMP_DIRECTX   "Use Directx" CMP_HOST_WINDOWS) # set for windows only
 cmp_option(OPTION_CMP_VULKAN    "Use Vulkan" OPTION_ENABLE_ALL_APPS)
 cmp_option(OPTION_CMP_OPENGL    "Use OpenGL" ON)   # available on all platforms
-cmp_option(OPTION_CMP_QT        "Use Qt for Image Loading" OPTION_ENABLE_ALL_APPS OR OPTION_BUILD_APPS_CMP_GUI)
-cmp_option(OPTION_CMP_OPENCV    "Use OpenCV" ON)   # available on all platforms
+cmp_option(OPTION_CMP_QT        "Use Qt for Image Loading" OFF)
+cmp_option(OPTION_CMP_OPENCV    "Use OpenCV" OFF)   # available on all platforms
 cmp_option(OPTION_CMP_GTC       "Use GTC Codec" OFF) # Internal R&D
 cmp_option(OPTION_CMP_APC       "Use APC Codec" OFF) # Internal R&D
 
@@ -339,10 +340,10 @@ if (LIB_BUILD_MESHCOMPRESSOR)
 endif()
 
 # Add CLI common to all OS
-if (OPTION_BUILD_APPS_CMP_CLI)
-    message("Build CLI setup")
-    add_subdirectory(applications/compressonatorcli)
-endif()
+#if (OPTION_BUILD_APPS_CMP_CLI)
+    #message("Build CLI setup")
+    #add_subdirectory(applications/compressonatorcli)
+#endif()
 
 if (LIB_BUILD_GPUDECODE)
         add_subdirectory(applications/_libs/gpu_decode)
