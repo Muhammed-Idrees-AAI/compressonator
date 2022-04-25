@@ -79,7 +79,7 @@ set(LIB_BUILD_COMPRESSONATOR_SDK OFF)
 set(LIB_BUILD_FRAMEWORK_SDK OFF)
 set(LIB_BUILD_IMAGEIO OFF)
 set(LIB_BUILD_ANALYSIS OFF)
-set(LIB_BUILD_COMMON ON)
+set(LIB_BUILD_COMMON OFF)
 set(LIB_BUILD_CORE ON)
 set(LIB_BUILD_GPUDECODE OFF)
 
@@ -116,7 +116,7 @@ cmp_option(OPTION_CMP_GTC       "Use GTC Codec" OFF) # Internal R&D
 cmp_option(OPTION_CMP_APC       "Use APC Codec" OFF) # Internal R&D
 
 cmp_option(NO_LEGACY_BEHAVIOR   "Disables any legacy behavior (before CMake migration)" ON) # this needs to be removed
-
+cmp_option(OPTION_CMP_OPENCV    "Use OpenCV" OFF)   # available on all platforms
 # --------------------------------------------
 # build system options for internal devs
 # --------------------------------------------
